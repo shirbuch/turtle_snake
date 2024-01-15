@@ -7,54 +7,45 @@ import rospy
 from turtle_snake.srv import Turn,TurnResponse
 from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
-from std_srvs.srv import Empty
 
 PI = 3.1415926535897
-MIN_THETA = -PI
-MAX_THETA = PI/6
-angular_speed = 30*2*PI/360
 
-current_pose = Pose()
-
-def print_turtle_pose(Pose, message=None):
-    print("----------------")
-    if message:
-        print(message)
-    print("x:", Pose.x)
-    print("y:", Pose.y)
-    print("theta:", Pose.theta)
-    print("----------------")
-
-def pose_callback(msg):
-    global current_pose
-    current_pose = msg
-
-def turn_turtle(degrees):
+def turn_turtle(degrees, speed=45, clockwise=False): # speed is (degrees/sec)
     velocity_publisher = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
     rospy.Subscriber('/turtle1/pose', Pose, pose_callback)
-
     vel_msg = Twist()
-    relative_angle = degrees*2*PI/360
-    vel_msg.angular.z = fabs(angular_speed)
-    
-    init_angle = current_pose.theta
-    angle_traveled = 0
-    print_turtle_pose(current_pose, "Initial Turtle Pose")
-    
-    while(angle_traveled < init_angle + relative_angle):
-        intermediate_init_angle = current_pose.theta
-        
-        velocity_publisher.publish(vel_msg)
-        
-        # todo: check if other side needed
-        if current_pose.theta < 0 and intermediate_init_angle > 0:
-            angle_traveled += current_pose.theta - MIN_THETA + MAX_THETA - intermediate_init_angle
-        else:
-            angle_traveled += fabs(current_pose.theta - intermediate_init_angle)
 
+    # Converting from degrees to radians
+    angular_speed = speed*2*PI/360
+    wanted_angle_change = degrees*2*PI/360
+
+    # We wont use linear components
+    vel_msg.linear.x=0
+    vel_msg.linear.y=0
+    vel_msg.linear.z=0
+    vel_msg.angular.x = 0
+    vel_msg.angular.y = 0
+
+    # Checking if our movement is CW or CCW
+    if clockwise:
+        vel_msg.angular.z = -fabs(angular_speed)
+    else:
+        vel_msg.angular.z = fabs(angular_speed)
+
+    # Setting the current time for distance calculus
+    t0 = rospy.Time.now().to_sec()
+    current_angle_change = 0
+
+    # Rotate the robot
+    while(current_angle_change < wanted_angle_change):
+        velocity_publisher.publish(vel_msg)
+        t1 = rospy.Time.now().to_sec()
+        current_angle_change = angular_speed*(t1-t0)
+
+    # Forcing our robot to stop
     vel_msg.angular.z = 0
     velocity_publisher.publish(vel_msg)
-    print_turtle_pose(current_pose, "Final Turtle Pose")
+    
     return
 
 def handle_turn(req):
