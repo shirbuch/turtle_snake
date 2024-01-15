@@ -28,14 +28,20 @@ def usage():
     return "Usage: [move|turn] [distance||degrees]"
 
 if __name__ == "__main__":
-    if len(sys.argv) == 3:
-        command = sys.argv[1]
-        amount = int(sys.argv[2])
-    else:
-        print(usage())
-        sys.exit(1)
-    print("Requesting %s of %s"%(command, amount))
-    if command == "move":
-        move_client(amount)
-    elif command == "turn":
-        turn_client(amount)
+    while True:
+        user_input = input("Enter your command: ")
+        try:
+            [command, amount] = user_input.split()
+            amount = int(amount)
+        except ValueError:
+            print(usage())
+            continue
+        if command not in ["move", "turn"]:
+            print(usage())
+            continue
+
+        print("Requesting %s of %s"%(command, amount))
+        if command == "move":
+            move_client(amount)
+        elif command == "turn":
+            turn_client(amount)
