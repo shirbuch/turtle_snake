@@ -8,13 +8,8 @@ from turtle_snake.srv import *
 from std_srvs.srv import Empty
 from turtlesim.msg import Pose
 
-DEBUG = True
-
-DISTANCES = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.10]
-DEGREES = [45, 50, 70, 90, 110, 130, 150, 180, 200, 250]
-
-DISTANCES = [i for i in range(10)]
-DEGREES = [20*i for i in range(10)]
+DISTANCES = [4, 3.9, 7.5, 7.2, 3, 5, 2, 2.5, 1, 1.2]
+DEGREES = [90, 91, 92, 93, 94, 96, 97, 98, 99, 100]
 
 current_pose = Pose()
 
@@ -60,7 +55,10 @@ if __name__ == "__main__":
     rospy.wait_for_service('turn')
     rospy.Subscriber('/turtle1/pose', Pose, pose_callback) # subscribe to turtle position
 
-    # todo deleteme
+    print("=====================================")
+    print("============  CONTROL  ===============")
+    print("=====================================")
+    # todo deleteme and all current_pose related if needed
     # print_turtle_pose(current_pose, "Initial Turtle Pose")
     # print_turtle_pose(current_pose, "Final Turtle Pose")
 
