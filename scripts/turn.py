@@ -9,6 +9,7 @@ from geometry_msgs.msg import Twist
 
 PI = 3.1415926535897
 
+# Service logic
 def turn_turtle(degrees, speed=45, clockwise=False): # speed is (degrees/sec)
     velocity_publisher = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
     vel_msg = Twist()
@@ -49,7 +50,8 @@ def turn_turtle(degrees, speed=45, clockwise=False): # speed is (degrees/sec)
 def handle_turn(req):
     try:
         degrees = req.degrees
-        print("Turning %s degrees"%(degrees))
+        if degrees != 0:
+            print("Turning %s degrees"%(degrees))
         turn_turtle(degrees)
         return TurnResponse()
     except rospy.ROSInterruptException as e:
