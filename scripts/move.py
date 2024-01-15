@@ -14,8 +14,10 @@ MAX_X = 11.096445
 MIN_X = -0.023555
 MAX_Y = 11.096445
 MIN_Y = -0.023555
+speed = 1
 
 # todo: deleteme: distance <= 0 or (current_pose.x + distance >= MAX_X): # a check that we are good...
+# todo: stop if reached wall
 
 def print_turtle_pose(Pose, message=None):
     print("----------------")
@@ -35,7 +37,6 @@ def move_turtle(distance):
     rospy.Subscriber('/turtle1/pose', Pose, pose_callback) # subscribe to turtle position
     
     vel_msg = Twist()
-    speed = 1
     vel_msg.linear.x = abs(speed) # linear.x moves the turtle in the x axis (to the right)
 
     init_pos = current_pose # used for calculating distance traveled
