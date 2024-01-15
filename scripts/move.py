@@ -64,7 +64,6 @@ def move_turtle(distance, speed=3):
     
     while(distance_traveled < distance): # while loop, for our moving
         if bumping_wall(current_pose):
-            print("Reached a wall!")
             break
         velocity_publisher.publish(vel_msg) # important, this is responsible for the moving itself
         distance_traveled = sqrt((current_pose.x - init_pos.x)**2 + (current_pose.y - init_pos.y)**2) # calculating distance traveled
