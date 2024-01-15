@@ -6,13 +6,11 @@ from math import fabs
 import rospy
 from turtle_snake.srv import Turn,TurnResponse
 from geometry_msgs.msg import Twist
-from turtlesim.msg import Pose
 
 PI = 3.1415926535897
 
 def turn_turtle(degrees, speed=45, clockwise=False): # speed is (degrees/sec)
     velocity_publisher = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
-    rospy.Subscriber('/turtle1/pose', Pose, pose_callback)
     vel_msg = Twist()
 
     # Converting from degrees to radians

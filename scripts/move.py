@@ -7,7 +7,6 @@ import rospy
 from turtle_snake.srv import Move,MoveResponse
 from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
-from std_srvs.srv import Empty
 
 current_pose = Pose()
 MAX_X = 11.096445
@@ -18,15 +17,6 @@ speed = 1
 
 # todo: deleteme: distance <= 0 or (current_pose.x + distance >= MAX_X): # a check that we are good...
 # todo: stop if reached wall
-
-def print_turtle_pose(Pose, message=None):
-    print("----------------")
-    if message:
-        print(message)
-    print("x:", Pose.x)
-    print("y:", Pose.y)
-    print("theta:", Pose.theta)
-    print("----------------")
 
 def pose_callback(msg):
     global current_pose
@@ -41,7 +31,6 @@ def move_turtle(distance):
 
     init_pos = current_pose # used for calculating distance traveled
     distance_traveled = 0
-    print_turtle_pose(current_pose, "Initial Turtle Pose")
     
     while(distance_traveled < distance): # while loop, for our moving
         velocity_publisher.publish(vel_msg) # important, this is responsible for the moving itself
@@ -50,7 +39,7 @@ def move_turtle(distance):
     vel_msg.linear.x = 0 # stops the turtle
     vel_msg.linear.y = 0 # stops the turtle
     velocity_publisher.publish(vel_msg) # publishing to the turtle velocity node to stop.
-    print_turtle_pose(current_pose, "Final Turtle Pose")
+
     return
 
 def handle_move(req):
