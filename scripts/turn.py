@@ -2,27 +2,18 @@
 
 from __future__ import print_function
 
-import sys
+from turtle_snake.srv import Turn,TurnResponse
 import rospy
-from turtle_snake.srv import *
 
-def move_client(distance):
-    rospy.wait_for_service('move')
-    try:
-        move = rospy.ServiceProxy('move', Move)
-        resp = move(distance)
-        return
-    except rospy.ServiceException as e:
-        print("Service call failed: %s"%e)
+def handle_turn(req):
+    print("Turning %s degrees"%(req.degrees))
+    return TurnResponse()
 
-def usage():
-    return "%s [distance]"%sys.argv[0]
+def turn_server():
+    rospy.init_node('turn_server')
+    s = rospy.Service('turn', Turn, handle_turn)
+    print("Ready to turn.")
+    rospy.spin()
 
 if __name__ == "__main__":
-    if len(sys.argv) == 2:
-        distance = int(sys.argv[1])
-    else:
-        print(usage())
-        sys.exit(1)
-    print("Requesting %s"%(distance))
-    move_client(distance)
+    turn_server()

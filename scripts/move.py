@@ -6,7 +6,7 @@ from turtle_snake.srv import Move,MoveResponse
 import rospy
 
 def handle_move(req):
-    print("Moving length %s"%(req.distance))
+    print("Moving distance %s"%(req.distance))
     return MoveResponse()
 
 def move_server():
