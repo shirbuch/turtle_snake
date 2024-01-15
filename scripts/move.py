@@ -8,22 +8,11 @@ from turtle_snake.srv import Move,MoveResponse
 from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
 
-current_pose = Pose()
 MAX_X = 11
 MIN_X = 0
 MAX_Y = 11
 MIN_Y = 0
 
-def print_turtle_pose(message=None):
-    print("----------------")
-    if message:
-        print(message)
-    print("x:", current_pose.x)
-    print("y:", current_pose.y)
-    print("theta:", current_pose.theta)
-    pose_degrees = current_pose.theta * 180/PI
-    print("pose_degrees:", pose_degrees)
-    print("----------------")
 PI = 3.1415926535897
 
 current_pose = Pose()
@@ -64,6 +53,7 @@ def bumping_wall(pose):
 
 # Service logic
 def move_turtle(distance, speed=3):
+    rospy.Subscriber('/turtle1/pose', Pose, pose_callback) # subscribe to turtle position
     velocity_publisher = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10) # publishing to the turtle velocity
     
     vel_msg = Twist()
@@ -79,15 +69,14 @@ def move_turtle(distance, speed=3):
         velocity_publisher.publish(vel_msg) # important, this is responsible for the moving itself
         distance_traveled = sqrt((current_pose.x - init_pos.x)**2 + (current_pose.y - init_pos.y)**2) # calculating distance traveled
     
-    vel_msg.linear.x = 0 # stops the turtle
-    vel_msg.linear.y = 0 # stops the turtle
+    # stop the turtle
+    vel_msg.linear.x = 0
+    vel_msg.linear.y = 0
     velocity_publisher.publish(vel_msg) # publishing to the turtle velocity node to stop
 
     return
 
 def handle_move(req):
-    rospy.Subscriber('/turtle1/pose', Pose, pose_callback) # subscribe to turtle position
-
     try:
         distance = req.distance
         if distance < 0 or distance >= MAX_X - MIN_X:
@@ -95,6 +84,7 @@ def handle_move(req):
             return MoveResponse()
         elif distance != 0:
             print("Moving distance %s"%(distance))
+        
         move_turtle(distance)
         return MoveResponse()
     except rospy.ROSInterruptException as e:
