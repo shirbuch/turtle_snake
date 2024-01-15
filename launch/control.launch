@@ -1,4 +1,5 @@
 <launch>
+  <node name="turtlesim_node" pkg="turtlesim" type="turtlesim_node" output="screen"> </node>
   <node name="observer_node" pkg="turtle_snake" type="observer.py" output="screen"/>
   <node name="move_node" pkg="turtle_snake" type="move.py" output="screen"/>
   <node name="turn_node" pkg="turtle_snake" type="turn.py" output="screen"/>
