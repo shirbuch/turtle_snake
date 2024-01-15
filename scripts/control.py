@@ -5,9 +5,14 @@ from __future__ import print_function
 import sys
 import rospy
 from turtle_snake.srv import *
+import random
+
+MAP_SIDE_LEN = 10 # todo
+
+DISTANCES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+DEGREES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 def move_client(distance):
-    rospy.wait_for_service('move')
     try:
         move = rospy.ServiceProxy('move', Move)
         resp = move(distance)
@@ -16,7 +21,6 @@ def move_client(distance):
         print("Service call failed: %s"%e)
 
 def turn_client(degrees):
-    rospy.wait_for_service('turn')
     try:
         turn = rospy.ServiceProxy('turn', Turn)
         resp = turn(degrees)
@@ -24,24 +28,13 @@ def turn_client(degrees):
     except rospy.ServiceException as e:
         print("Service call failed: %s"%e)
 
-def usage():
-    return "Usage: [move|turn] [distance||degrees]"
-
 if __name__ == "__main__":
-    while True:
-        user_input = input("Enter your command: ")
-        try:
-            [command, amount] = user_input.split()
-            amount = int(amount)
-        except ValueError:
-            print(usage())
-            continue
-        if command not in ["move", "turn"]:
-            print(usage())
-            continue
+    rospy.wait_for_service('move')
+    rospy.wait_for_service('turn')
 
-        print("Requesting %s of %s"%(command, amount))
-        if command == "move":
-            move_client(amount)
-        elif command == "turn":
-            turn_client(amount)
+    for i in range(10):        
+        distance = DISTANCES[i]
+        move_client(distance)
+        
+        degrees = DEGREES[i]
+        turn_client(degrees)
