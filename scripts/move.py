@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from __future__ import print_function
+from math import sqrt
 
 import rospy
 from turtle_snake.srv import Move,MoveResponse
@@ -37,17 +38,17 @@ def move_turtle(distance):
     speed = 1
     vel_msg.linear.x = abs(speed) # linear.x moves the turtle in the x axis (to the right)
 
-    init_pos = current_pose.x # used for calculating distance traveled
+    init_pos = current_pose # used for calculating distance traveled
     distance_traveled = 0
     print_turtle_pose(current_pose, "Initial Turtle Pose")
     
     while(distance_traveled < distance): # while loop, for our moving
         velocity_publisher.publish(vel_msg) # important, this is responsible for the moving itself
-        distance_traveled = abs(current_pose.x - init_pos) # calculating distance traveled
+        distance_traveled = sqrt((current_pose.x - init_pos.x)**2 + (current_pose.y - init_pos.y)**2) # calculating distance traveled
     
     vel_msg.linear.x = 0 # stops the turtle
+    vel_msg.linear.y = 0 # stops the turtle
     velocity_publisher.publish(vel_msg) # publishing to the turtle velocity node to stop.
-
     print_turtle_pose(current_pose, "Final Turtle Pose")
     return
 
