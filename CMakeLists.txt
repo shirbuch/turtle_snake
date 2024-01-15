@@ -57,6 +57,7 @@ add_service_files(
   FILES
   Move.srv
   Turn.srv
+  Observer.srv
 )
 
 ## Generate actions in the 'action' folder
