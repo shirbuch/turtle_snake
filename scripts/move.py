@@ -51,6 +51,9 @@ def bumping_wall(pose):
     pose_degrees = 180 + pose.theta * 180/PI
     return bumping_right_wall(pose_degrees, pose.x) or bumping_left_wall(pose_degrees, pose.x) or bumping_upper_wall(pose_degrees, pose.y) or bumping_lower_wall(pose_degrees, pose.y)
 
+def calculate_distance(first_pose, second_pose):
+    return sqrt((second_pose.x - first_pose.x)**2 + (second_pose.y - first_pose.y)**2) # calculating distance traveled
+
 # Service logic
 def move_turtle(distance, speed=3):
     rospy.Subscriber('/turtle1/pose', Pose, pose_callback) # subscribe to turtle position
@@ -59,14 +62,14 @@ def move_turtle(distance, speed=3):
     vel_msg = Twist()
     vel_msg.linear.x = speed # linear.x moves the turtle
 
-    init_pos = current_pose # used for calculating distance traveled
+    init_pose = current_pose # used for calculating distance traveled
     distance_traveled = 0
     
     while(distance_traveled < distance): # while loop, for our moving
         if bumping_wall(current_pose):
             break
         velocity_publisher.publish(vel_msg) # important, this is responsible for the moving itself
-        distance_traveled = sqrt((current_pose.x - init_pos.x)**2 + (current_pose.y - init_pos.y)**2) # calculating distance traveled
+        distance_traveled = calculate_distance(init_pose, current_pose) # calculating distance traveled
     
     # stop the turtle
     vel_msg.linear.x = 0
