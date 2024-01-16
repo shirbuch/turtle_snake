@@ -9,7 +9,7 @@ from turtlesim.msg import Pose
 
 PI = 3.1415926535897
 
-MAX_X = 11
+MAX_X = 11.07
 MIN_X = 0
 MAX_Y = 11
 MIN_Y = 0
@@ -27,57 +27,34 @@ def pose_callback(msg):
 def calculate_distance(first_pose, second_pose):
     return sqrt((second_pose.x - first_pose.x)**2 + (second_pose.y - first_pose.y)**2) # calculating distance traveled
 
-def subtract_thetas(angle1, angle2):
-    degrees1 = angle1 * 180/PI
-    degrees2 = angle2 * 180/PI
-    sub = degrees1 - degrees2
-    if sub < 0:
-        sub += 360
-    return sub * PI/180
-
 # Wall facing checks
-def facing_lower_wall(pose_degrees):
+def facing_down(pose_degrees):
     return pose_degrees > 0 and pose_degrees < 180
 
-def facing_upper_wall(pose_degrees):
+def facing_up(pose_degrees):
     return pose_degrees > 180 and pose_degrees < 360
 
-def facing_right_wall(pose_degrees):
+def facing_right(pose_degrees):
     return pose_degrees > 90 and pose_degrees < 270
 
-def facing_left_wall(pose_degrees):
+def facing_left(pose_degrees):
     return (pose_degrees > 270 or pose_degrees < 90)
-
-def get_wall_facing(pose_degrees):
-    ret = ""
-    if facing_lower_wall(pose_degrees):
-        ret += "lower "
-    if facing_upper_wall(pose_degrees):
-        ret += "upper "
-    if facing_right_wall(pose_degrees):
-        ret += "right "
-    if facing_left_wall(pose_degrees):
-        ret += "left "
-
-    return ret
 
 # Bumping wall checks
 def bumping_lower_wall(pose_degrees, pose_y):
-    return facing_lower_wall(pose_degrees) and pose_y <= MIN_Y
+    return facing_down(pose_degrees) and pose_y <= MIN_Y
 
 def bumping_upper_wall(pose_degrees, pose_y):
-    return facing_upper_wall(pose_degrees) and pose_y > MAX_Y
+    return facing_up(pose_degrees) and pose_y > MAX_Y
 
 def bumping_right_wall(pose_degrees, pose_x):
-    return facing_right_wall(pose_degrees) and pose_x > MAX_X
+    return facing_right(pose_degrees) and pose_x >= MAX_X
 
 def bumping_left_wall(pose_degrees, pose_x):
-    return facing_left_wall(pose_degrees) and pose_x <= MIN_X
+    return facing_left(pose_degrees) and pose_x <= MIN_X
 
 def bumping_wall(pose):
     pose_degrees = 180 + pose.theta * 180/PI
-    # todo deleteme
-    print(f"Facing: {get_wall_facing(pose_degrees)}")
     return bumping_right_wall(pose_degrees, pose.x) or bumping_left_wall(pose_degrees, pose.x) or bumping_upper_wall(pose_degrees, pose.y) or bumping_lower_wall(pose_degrees, pose.y)
 
 # Service logic
@@ -85,16 +62,13 @@ def handle_observer(req):
     global angles
     global prev_pose
 
-    print("--------")
     try:
         if(req.angle == -1):
             if len(angles) != 10:
                 print("Not enough segments!")
             return ObserverResponse()
         elif(req.angle != 0):
-            current_pose_with_prev_angle = current_pose
-            current_pose_with_prev_angle.theta = subtract_thetas(current_pose_with_prev_angle.theta, (req.angle * PI/180))
-            if bumping_wall(current_pose_with_prev_angle):
+            if bumping_wall(current_pose):
                 print("Bumped in wall!")
 
             distance = round(calculate_distance(prev_pose, current_pose), 1)

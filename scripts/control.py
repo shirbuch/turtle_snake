@@ -55,13 +55,14 @@ if __name__ == "__main__":
     send_angle(0) # Signal that the turtle is reseted
     for i in range(len(DISTANCES)):        
         distance = DISTANCES[i]
+        degrees = DEGREES[i]
+
         move_turtle(distance)
         sleep(1)
 
-        degrees = DEGREES[i]
+        send_angle(degrees)
+
         turn_turtle(degrees)
         sleep(1)
-
-        send_angle(degrees)
 
     send_angle(-1) # Signal end

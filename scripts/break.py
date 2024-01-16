@@ -8,7 +8,7 @@ from turtle_snake.srv import *
 from std_srvs.srv import Empty
 
 DISTANCES = [10, 2, 2, 8.8, 8.7, 3, 3]
-DEGREES = [90, 90, 90, 180, 270, 10, 10]
+DEGREES = [90, 90, 90, 200, 270, 10, 10]
 
 def reset_turtle():
     print("Resetting turtle location")
@@ -55,13 +55,14 @@ if __name__ == "__main__":
     reset_turtle()
     for i in range(len(DISTANCES)):        
         distance = DISTANCES[i]
+        degrees = DEGREES[i]
+
         move_turtle(distance)
         sleep(1)
 
-        degrees = DEGREES[i]
+        send_angle(degrees)
+
         turn_turtle(degrees)
         sleep(1)
-
-        send_angle(degrees)
 
     send_angle(-1) # Signal end

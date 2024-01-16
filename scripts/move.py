@@ -8,7 +8,7 @@ from turtle_snake.srv import Move,MoveResponse
 from geometry_msgs.msg import Twist
 from turtlesim.msg import Pose
 
-MAX_X = 11
+MAX_X = 11.07
 MIN_X = 0
 MAX_Y = 11
 MIN_Y = 0
@@ -22,30 +22,30 @@ def pose_callback(msg):
     current_pose = msg
 
 # Wall facing checks
-def facing_lower_wall(pose_degrees):
+def facing_down(pose_degrees):
     return pose_degrees > 0 and pose_degrees < 180
 
-def facing_upper_wall(pose_degrees):
+def facing_up(pose_degrees):
     return pose_degrees > 180 and pose_degrees < 360
 
-def facing_right_wall(pose_degrees):
+def facing_right(pose_degrees):
     return pose_degrees > 90 and pose_degrees < 270
 
-def facing_left_wall(pose_degrees):
+def facing_left(pose_degrees):
     return (pose_degrees > 270 or pose_degrees < 90)
 
 # Bumping wall checks
 def bumping_lower_wall(pose_degrees, pose_y):
-    return facing_lower_wall(pose_degrees) and pose_y <= MIN_Y
+    return facing_down(pose_degrees) and pose_y <= MIN_Y
 
 def bumping_upper_wall(pose_degrees, pose_y):
-    return facing_upper_wall(pose_degrees) and pose_y > MAX_Y
+    return facing_up(pose_degrees) and pose_y > MAX_Y
 
 def bumping_right_wall(pose_degrees, pose_x):
-    return facing_right_wall(pose_degrees) and pose_x > MAX_X
+    return facing_right(pose_degrees) and pose_x >= MAX_X
 
 def bumping_left_wall(pose_degrees, pose_x):
-    return facing_left_wall(pose_degrees) and pose_x <= MIN_X
+    return facing_left(pose_degrees) and pose_x <= MIN_X
 
 def bumping_wall(pose):
     pose_degrees = 180 + pose.theta * 180/PI

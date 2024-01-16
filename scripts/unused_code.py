@@ -18,3 +18,16 @@ def print_observing_handling():
     print(f"Distances: {distances}")
     print(f"Angles: {angles}")
     print("-------------------------------------")
+
+def get_wall_facing(pose_degrees):
+    ret = ""
+    if facing_down(pose_degrees):
+        ret += "down "
+    if facing_up(pose_degrees):
+        ret += "up "
+    if facing_right(pose_degrees):
+        ret += "right "
+    if facing_left(pose_degrees):
+        ret += "left "
+
+    return ret
