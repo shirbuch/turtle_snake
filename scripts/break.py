@@ -34,6 +34,14 @@ def turn_turtle(degrees):
     except rospy.ServiceException as e:
         print("Service call failed: %s"%e)
 
+def send_angle(degrees):
+    try:
+        observer = rospy.ServiceProxy('observer', Observer)
+        resp = observer(degrees)
+        return
+    except rospy.ServiceException as e:
+        print("Service call failed: %s"%e)
+
 # Service logic
 if __name__ == "__main__":
     rospy.wait_for_service('move')
@@ -43,6 +51,7 @@ if __name__ == "__main__":
     print("=============  BREAK  ===============")
     print("=====================================")
 
+    send_angle(0) # Signal that the rturtle is reseted
     reset_turtle()
     for i in range(10):        
         distance = DISTANCES[i]
@@ -52,3 +61,5 @@ if __name__ == "__main__":
         degrees = DEGREES[i]
         turn_turtle(degrees)
         sleep(1)
+
+        send_angle(degrees)

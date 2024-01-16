@@ -9,3 +9,12 @@ def print_turtle_pose(pose, message=None):
     pose_degrees = pose.theta * 180/PI
     print("pose_degrees:", pose_degrees)
     print("----------------")
+
+def print_observing_handling():
+    print("------------ Observer ----------------")
+    print(f"prev_pose: {prev_pose}")
+    print(f"current_pose: {current_pose}")
+    print("-------------------------------------")
+    print(f"Distances: {distances}")
+    print(f"Angles: {angles}")
+    print("-------------------------------------")
