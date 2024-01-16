@@ -25,7 +25,11 @@ def handle_observer(req):
     global prev_pose
 
     try:
-        if(req.angle != 0):
+        if(req.angle == -1):
+            if len(angles) != 10:
+                print("Not enough segments!")
+            return ObserverResponse()
+        elif(req.angle != 0):
             # todo add wall check
 
             distance = round(calculate_distance(prev_pose, current_pose), 1)

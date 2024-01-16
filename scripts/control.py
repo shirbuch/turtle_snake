@@ -52,8 +52,8 @@ if __name__ == "__main__":
     print("=====================================")
 
     reset_turtle()
-    send_angle(0) # Signal that the rturtle is reseted
-    for i in range(10):        
+    send_angle(0) # Signal that the turtle is reseted
+    for i in range(len(DISTANCES)):        
         distance = DISTANCES[i]
         move_turtle(distance)
         sleep(1)
@@ -63,3 +63,5 @@ if __name__ == "__main__":
         sleep(1)
 
         send_angle(degrees)
+
+    send_angle(-1) # Signal end

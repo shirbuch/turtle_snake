@@ -7,8 +7,8 @@ import rospy
 from turtle_snake.srv import *
 from std_srvs.srv import Empty
 
-DISTANCES = [10, 6, 9, 8.8, 8.7, 3, 8, 2, 2, 4]
-DEGREES = [90, 10, 180, 270, 10, 93, 90, 90, 90, 90]
+DISTANCES = [10, 2, 2, 8.8, 8.7, 3, 3]
+DEGREES = [90, 90, 90, 180, 270, 10, 10]
 
 def reset_turtle():
     print("Resetting turtle location")
@@ -51,9 +51,9 @@ if __name__ == "__main__":
     print("=============  BREAK  ===============")
     print("=====================================")
 
-    send_angle(0) # Signal that the rturtle is reseted
+    send_angle(0) # Signal that the turtle is reseted
     reset_turtle()
-    for i in range(10):        
+    for i in range(len(DISTANCES)):        
         distance = DISTANCES[i]
         move_turtle(distance)
         sleep(1)
@@ -63,3 +63,5 @@ if __name__ == "__main__":
         sleep(1)
 
         send_angle(degrees)
+
+    send_angle(-1) # Signal end
