@@ -7,7 +7,7 @@ import rospy
 from turtle_snake.srv import *
 from std_srvs.srv import Empty
 
-DISTANCES = [10, 2, 2, 8.8, 8.7, 3, 3]
+DISTANCES = [3, 2, 2, 8.8, 8.7, 3, 4]
 DEGREES = [90, 90, 90, 200, 270, 10, 10]
 
 def reset_turtle():

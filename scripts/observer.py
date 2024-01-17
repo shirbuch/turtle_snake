@@ -20,12 +20,18 @@ angles = []
 prev_pose = Pose()
 current_pose = Pose()
 
+init = False
+
 def pose_callback(msg):
-    global current_pose
+    global prev_pose, current_pose, init
     current_pose = msg
+    if not init:
+        prev_pose = current_pose
+        init = True
 
 def calculate_distance(first_pose, second_pose):
-    return sqrt((second_pose.x - first_pose.x)**2 + (second_pose.y - first_pose.y)**2) # calculating distance traveled
+    distance = sqrt((second_pose.x - first_pose.x)**2 + (second_pose.y - first_pose.y)**2) # calculating distance traveled
+    return distance
 
 # Wall facing checks
 def facing_down(pose_degrees):
