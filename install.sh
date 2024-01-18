@@ -1,7 +1,5 @@
 #!/bin/bash
 
-@echo off
-
 original_dir=$(pwd)
 
 echo ~/catkin_ws
