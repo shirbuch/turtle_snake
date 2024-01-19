@@ -13,7 +13,7 @@ cd "$original_dir/scripts"
 
 for file in *; do
     if [ -f "$file" ]; then
-        chmod u+x "$file"
+        chmod +x "$file"
         echo "chmod +x $file"
     fi
 
