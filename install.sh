@@ -14,6 +14,9 @@ cd "$original_dir/scripts"
 for file in *; do
     if [ -f "$file" ]; then
         chmod u+x "$file"
-        echo "chmod u+x $file"
+        echo "chmod +x $file"
     fi
+
+source ~/catkin_ws/devel/setup.bash
+
 done
