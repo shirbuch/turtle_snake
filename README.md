@@ -3,7 +3,7 @@
 ### Build:
 1. Unzip turtle_snake.zip into ~/catkin_ws/src
 2. open terminal and cd into (unzipped) turtle_snake
-3. chmod u+x install.sh
+3. chmod +x install.sh
 4. ./install.sh (this is to compile the turtle_snake package and chmod u+x to all script files in turtle_snake/scripts)
 
 
